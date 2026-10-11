@@ -1,0 +1,149 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Date Night Escape 🔐 Delene & Rod</title><meta name="theme-color" content="#3a2350">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap');
+:root{--bg1:#ffe4ec;--bg2:#e9e1ff;--ink:#4a2b45;--rose:#ff6f91;--gold:#f7b955;--lav:#a98bff;--card:#fffafcdd}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Fredoka,system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));min-height:100vh;overflow-x:hidden}
+h1,h2{font-family:'Playfair Display',serif;text-align:center;margin:.4em 0}
+h1{font-size:2rem;background:linear-gradient(90deg,var(--rose),var(--lav));-webkit-background-clip:text;color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 90px}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #c46a9a22;backdrop-filter:blur(6px);animation:pop .35s ease}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;margin:8px 0;font:600 1.05rem Fredoka;color:#fff;background:linear-gradient(135deg,var(--rose),#ff9a8b);box-shadow:0 4px 14px #ff6f9155;transition:transform .1s}
+.btn:active{transform:scale(.96)}.btn.alt{background:linear-gradient(135deg,var(--lav),#7fb3ff)}.btn.ghost{background:#fff;color:var(--ink);box-shadow:none;border:2px solid #f3c6d6}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+input,select{font:600 1.1rem Fredoka;padding:12px;border-radius:14px;border:2px solid #f3c6d6;width:100%;background:#fff;color:var(--ink);text-align:center}
+.muted{opacity:.7;text-align:center;font-size:.95rem}.code{font-size:1.8rem;letter-spacing:.2em;color:var(--rose)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:30px;z-index:99;animation:pop .3s}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+.hearts{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.hearts span{position:absolute;bottom:-40px;font-size:22px;opacity:.35;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-110vh) rotate(30deg)}}
+.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fffd;backdrop-filter:blur(8px);box-shadow:0 -4px 16px #0001;z-index:50}
+.tabs button{flex:1;border:0;background:none;padding:12px 4px 16px;font:600 .85rem Fredoka;color:var(--ink)}.tabs button.on{color:var(--rose)}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;background:#ffe0ea;font-size:.8rem;margin:2px}
+
+:root{--bg1:#2b1b3d;--bg2:#5a2a4f;--ink:#fbeaf2;--card:#ffffff14}
+input{background:#fff2}input,select{color:#fff;border-color:#ffffff40}.btn.ghost{background:#ffffff14;color:#fff;border-color:#ffffff40}
+.timer{text-align:center;font-size:1.6rem;font-weight:600;letter-spacing:.1em;color:var(--gold)}
+.clue{background:#fff1;border:1px dashed #ffffff50;border-radius:14px;padding:12px;margin:8px 0;line-height:1.5}
+.role{display:inline-block;padding:4px 12px;border-radius:20px;background:var(--rose);color:#fff;font-weight:600}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:240px;margin:auto}.g4 div{aspect-ratio:1;border-radius:10px;background:#ffffff1a;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+.lit{background:var(--gold)!important;box-shadow:0 0 16px var(--gold)}
+.prog{display:flex;justify-content:center;gap:8px;font-size:1.4rem}
+.curtain{position:fixed;inset:0;background:linear-gradient(160deg,#2b1b3d,#5a2a4f);z-index:70;display:flex;flex-direction:column;justify-content:center;padding:30px;text-align:center}
+.big{font-size:2.2rem;letter-spacing:.15em;text-align:center;font-weight:600}
+</style></head><body><div class="wrap" id="app"></div>
+<script>// ---- shared co-op layer (PeerJS public broker, host-authoritative) ----
+const NET={peer:null,conn:null,mode:'solo',me:0,code:'',onState:null,onStatus:null,apply:null};
+function netStatus(t){NET.onStatus&&NET.onStatus(t)}
+function netCode(){const a='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<4;i++)s+=a[Math.random()*a.length|0];return s}
+function netReady(){return typeof Peer!=='undefined'}
+function netSetup(c){
+  c.on('open',()=>{NET.conn=c;netStatus('connected');if(NET.mode==='host')netBroadcast();});
+  c.on('data',d=>{
+    if(NET.mode==='host'&&d.t==='act'){NET.apply(d.a,1);netBroadcast();NET.onState&&NET.onState();}
+    else if(NET.mode==='guest'&&d.t==='state'){NET.onState&&NET.onState(d.s);}
+  });
+  c.on('close',()=>{NET.conn=null;netStatus('disconnected')});
+}
+function netHost(prefix,cb){
+  if(!netReady())return netStatus('offline');
+  NET.mode='host';NET.me=0;NET.code=netCode();
+  NET.peer=new Peer(prefix+NET.code);
+  NET.peer.on('open',()=>{netStatus('waiting');cb&&cb(NET.code)});
+  NET.peer.on('connection',c=>{if(NET.conn)NET.conn.close();netSetup(c)});
+  NET.peer.on('error',e=>{if(e.type==='unavailable-id'){NET.peer.destroy();netHost(prefix,cb)}else netStatus('error: '+e.type)});
+}
+function netJoin(prefix,code){
+  if(!netReady())return netStatus('offline');
+  NET.mode='guest';NET.me=1;NET.code=code.toUpperCase().trim();
+  NET.peer=new Peer();
+  NET.peer.on('open',()=>{netStatus('connecting');netSetup(NET.peer.connect(prefix+NET.code,{reliable:true}))});
+  NET.peer.on('error',e=>netStatus(e.type==='peer-unavailable'?'no room with that code':'error: '+e.type));
+}
+let NET_GET=null; // fn returning state to broadcast
+function netBroadcast(){if(NET.mode==='host'&&NET.conn&&NET.conn.open)NET.conn.send({t:'state',s:NET_GET()})}
+// act: guest sends to host; host/solo apply locally
+function act(a){
+  if(NET.mode==='guest'){if(NET.conn&&NET.conn.open)NET.conn.send({t:'act',a});else toast('Not connected');return}
+  NET.apply(a,NET.mode==='solo'?(a.p??0):0);netBroadcast();NET.onState&&NET.onState();
+}
+function toast(m){let t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+// Lobby UI helper: renders into el, calls onStart(mode)
+function lobbyUI(el,prefix,onStart){
+  el.innerHTML=`<div class="card lob"><h3>Play together</h3>
+  <button class="btn" id="lbHost">💞 Create room (2 phones)</button>
+  <div class="row"><input id="lbCode" maxlength="4" placeholder="CODE" autocapitalize="characters"><button class="btn alt" id="lbJoin">Join</button></div>
+  <button class="btn ghost" id="lbSolo">📱 Pass-and-play on one phone</button>
+  <p id="lbStat" class="muted"></p></div>`;
+  const st=el.querySelector('#lbStat');
+  NET.onStatus=t=>{st.innerHTML=t==='waiting'?`Room code: <b class="code">${NET.code}</b><br>Ask your partner to open this game and tap Join.`:t==='connected'?'Connected! 💖':t==='offline'?'Online play unavailable — use pass-and-play.':t;
+    if(t==='connected')onStart(NET.mode); if(t==='disconnected')toast('Partner disconnected');};
+  el.querySelector('#lbHost').onclick=()=>netHost(prefix);
+  el.querySelector('#lbJoin').onclick=()=>{const c=el.querySelector('#lbCode').value;if(c.length===4)netJoin(prefix,c)};
+  el.querySelector('#lbSolo').onclick=()=>{NET.mode='solo';onStart('solo')};
+}
+
+(function(){const h=document.createElement('div');h.className='hearts';for(let i=0;i<14;i++){const s=document.createElement('span');s.textContent=['💗','💕','✨','🌸'][i%4];s.style.left=Math.random()*100+'%';s.style.animationDuration=(8+Math.random()*10)+'s';s.style.animationDelay=(-Math.random()*15)+'s';h.appendChild(s)}document.body.appendChild(h)})();
+let SND=localStorage.getItem('snd')!=='0';function beep(f=660,d=.12){if(!SND)return;try{const a=beep.c||(beep.c=new AudioContext()),o=a.createOscillator(),g=a.createGain();o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.15,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d)}catch(e){}}
+function chime(){beep(660);setTimeout(()=>beep(880),110);setTimeout(()=>beep(1320,.25),220)}
+
+const ROOMS=[
+{t:'Room 1 · The First Message',em:'📱',intro:'Long before the ring, there was a notification. Rod messaged first…',
+ A:`<div class="clue">📱 <b>His first message preview</b><div class="big">🌅 ☕ ☕ ☕</div></div><div class="clue">A note stuck to the phone: <i>"Same time every morning — I'll call you."</i></div>`,
+ B:`<div class="clue">🔑 <b>The emoji keypad</b><br>❤️ = 1 &nbsp; 💬 = 9 &nbsp; 📱 = 3<br>☕ = 0 &nbsp; 🌅 = 6 &nbsp; 🌙 = 7</div><div class="clue">The lock wants a 4-digit time.</div>`,
+ ans:'0600',hints:['Player A has the symbols, Player B has what they mean.','It\'s the time of the famous commute calls: 6:00 AM → 0600.']},
+{t:'Room 2 · The Commute Calls',em:'🚗',intro:'Every dawn drive came with his voice on the line.',
+ A:`<div class="clue">📞 <b>Call log, one week</b><br>Mon — 38 min<br>Tue — 21 min<br>Wed — 64 min<br>Thu — 45 min<br>Fri — 17 min</div>`,
+ B:`<div class="clue">📝 <b>Delene's planner note</b><br><i>"Lock = the minutes of our LONGEST call, followed by the minutes of our SHORTEST call."</i></div><div class="clue">The lock has 4 digits.</div>`,
+ ans:'6417',hints:['Player B knows the rule, Player A knows the numbers.','Longest = 64 (Wed), shortest = 17 (Fri).']},
+{t:'Room 3 · The Kitchen',em:'🍳',intro:'Rod loves food. Tonight you cook together — but the spice cabinet is locked.',
+ A:`<div class="clue">🫙 <b>Spice jars on the shelf</b><br>🔴 Taco jar — 3 scoops<br>🟡 Curry jar — 5 scoops<br>🟢 Dumpling jar — 8 scoops<br>🟣 Boba jar — 2 scoops</div>`,
+ B:`<div class="clue">🍽️ <b>Friday menu card</b><br>1. Indian curry<br>2. Asian dumplings<br>3. Mexican tacos<br><i>"Unlock with each dish's scoops, in menu order."</i></div>`,
+ ans:'583',hints:['Match each menu dish to a jar and read off the scoops.','Curry 5 → Dumplings 8 → Tacos 3.']},
+{t:'Room 4 · The Ring Box',em:'💍',intro:'Eleven months in, a small velvet box. Its lock is a word.',
+ A:`<div class="clue">💌 <b>Engraved inside the lid</b><div class="big">Q Z C P G P C</div></div><div class="clue">A B C D E F G H I J K L M<br>N O P Q R S T U V W X Y Z</div>`,
+ B:`<div class="clue">🗓️ <b>A calendar from the year you met</b><br>A heart is drawn on every month until the proposal:<div class="big">❤️❤️❤️❤️❤️❤️<br>❤️❤️❤️❤️❤️</div></div><div class="clue"><i>"Step each letter BACK one place in the alphabet for every heart."</i></div>`,
+ ans:'FOREVER',hints:['Count the hearts (11) and shift each engraved letter back 11 places, wrapping around.','Q→F, Z→O, C→R, P→E, G→V… it spells a 7-letter promise.']},
+{t:'Room 5 · The Nursery',em:'🌈',intro:'In the home you bought together, a little room waits for your rainbow baby.',
+ A:`<div class="clue">⭐ <b>Glow-in-the-dark ceiling stars</b><br>Only four still glow:<div class="g4">${[0,1,0,0, 0,0,0,1, 1,0,0,0, 0,0,1,0].map(x=>`<div class="${x?'lit':''}">${x?'⭐':''}</div>`).join('')}</div><p class="muted">Read them left→right, top→bottom.</p></div>`,
+ B:`<div class="clue">🧸 <b>Alphabet-block wall</b><div class="g4">${[7,0,4,8,5,9,3,2,1,6,8,4,9,3,0,5].map(n=>`<div>${n}</div>`).join('')}</div></div><div class="clue">A tag on the crib: <i>"His birthday, MMDD."</i></div>`,
+ ans:'0210',hints:['Overlay A\'s glowing stars on B\'s number blocks.','Row1 col2, row2 col4, row3 col1, row4 col3 → Gio\'s birthday, Feb 10.']},
+];
+const KEY='escape_v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'null')||{room:0,start:0,pen:0,hint:[0,0,0,0,0],msg:'',end:0,best:0};
+NET_GET=()=>S;let view=0;let curtain=false;
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+NET.apply=(a,p)=>{
+ if(a.k==='start'){S.room=0;S.start=Date.now();S.pen=0;S.hint=[0,0,0,0,0];S.msg='';S.end=0}
+ else if(a.k==='try'){const r=ROOMS[S.room];if(!r)return;if(a.v.toUpperCase().replace(/\s/g,'')===r.ans){S.room++;S.msg='✨ Unlocked!';if(S.room>=ROOMS.length){S.end=Date.now();const t=S.end-S.start+S.pen*1000;if(!S.best||t<S.best)S.best=t}}else S.msg='❌ "'+a.v+'" didn\'t open it. Talk it through!'}
+ else if(a.k==='hint'){if(S.hint[S.room]<2){S.hint[S.room]++;S.pen+=60}}
+ save()};
+let lastRoom=-1;
+NET.onState=s=>{if(s){S=s;save()}if(S.room!==lastRoom&&lastRoom>=0)chime();lastRoom=S.room;render()};
+const app=document.getElementById('app');
+function fmt(ms){ms=Math.max(0,ms);const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function elapsed(){return (S.end||Date.now())-S.start+S.pen*1000}
+function myRole(){return NET.mode==='solo'?view:NET.me}
+function render(){
+ const role=myRole(),RL=['A · Delene','B · Rod'];
+ let h=`<h1>Date Night Escape</h1><p class="muted">${NET.mode==='solo'?'pass-and-play':'room '+NET.code+(NET.conn?' · 💞 connected':' · waiting for partner')}</p>`;
+ if(!S.start){h+=`<div class="card"><p>Five locked rooms from your love story. <b>Each phone shows different clues</b> — neither of you can solve a room alone. Talk, share, and escape together.</p><p class="muted">Hints cost +60s. Target: under 20 minutes.</p><button class="btn" onclick="act({k:'start'})">🔐 Start the timer</button></div>`}
+ else if(S.room>=ROOMS.length){h+=`<div class="card" style="text-align:center"><div style="font-size:4rem">💞</div><h2>You escaped!</h2><p class="timer">${fmt(elapsed())}</p><p class="muted">Best: ${fmt(S.best)} · hints used: ${S.hint.reduce((a,b)=>a+b)}</p><p>From a first message to a 6 AM call, from a kitchen full of spice to a ring that said <b>forever</b>, to a nursery for Gio — and grace through every chapter.</p><p><i>Our story isn't finished.</i></p><button class="btn" onclick="act({k:'start'})">Play again</button></div>`}
+ else{const r=ROOMS[S.room];
+  h+=`<div class="prog">${ROOMS.map((x,i)=>i<S.room?'💖':i===S.room?x.em:'🔒').join('')}</div><p class="timer" id="tm">${fmt(elapsed())}</p>
+  <div class="card"><h2>${r.t}</h2><p><i>${r.intro}</i></p><p>You are <span class="role">Player ${RL[role]}</span> — your partner sees different clues.</p>${role===0?r.A:r.B}</div>
+  <div class="card"><div class="row"><input id="ans" placeholder="Enter code" autocomplete="off"><button class="btn" style="flex:.5" id="go">Try</button></div><p style="text-align:center">${S.msg}</p>
+  ${r.hints.slice(0,S.hint[S.room]).map(x=>`<div class="clue">💡 ${x}</div>`).join('')}${S.hint[S.room]<2?`<button class="btn ghost" onclick="act({k:'hint'})">💡 Hint (+60s)</button>`:''}
+  ${NET.mode==='solo'?`<button class="btn alt" onclick="curtain=true;render()">📱 Pass phone to Player ${RL[1-role]}</button>`:''}</div>`}
+ if(curtain)h+=`<div class="curtain"><div style="font-size:4rem">🙈</div><h2>Pass the phone</h2><p>Hand it to Player ${RL[1-view]}. No peeking!</p><button class="btn" onclick="view=1-view;curtain=false;render()">I'm Player ${RL[1-view]} — show my clues</button></div>`;
+ h+=`<button class="btn ghost" onclick="SND=!SND;localStorage.setItem('snd',SND?1:0);render()">Sound ${SND?'🔊':'🔇'}</button>`;
+ app.innerHTML=h;const go=document.getElementById('go');if(go){const i=document.getElementById('ans');go.onclick=()=>{if(i.value.trim())act({k:'try',v:i.value.trim()})};i.onkeydown=e=>{if(e.key==='Enter')go.onclick()}}
+}
+setInterval(()=>{const t=document.getElementById('tm');if(t&&S.start&&!S.end)t.textContent=fmt(elapsed())},1000);
+app.innerHTML='<h1>Date Night Escape</h1><p class="muted">A co-op escape room for Delene & Rod. Grab your phones and sit side by side.</p><div class="card" style="text-align:center;font-size:3rem">🔐💌🍳💍🌈</div><div id="lobby"></div><p class="muted">The room creator plays A (Delene\'s clues), the joiner plays B (Rod\'s clues).</p>';
+lobbyUI(document.getElementById('lobby'),'escape-dr-',()=>{lastRoom=S.room;render()});
+</script></body></html>

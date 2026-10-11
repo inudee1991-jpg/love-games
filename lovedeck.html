@@ -1,0 +1,211 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Love Deck 💞 Delene & Rod</title><meta name="theme-color" content="#ffb3c7">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,500&display=swap');
+:root{--bg1:#ffe4ec;--bg2:#e9e1ff;--ink:#4a2b45;--rose:#ff6f91;--gold:#f7b955;--lav:#a98bff;--card:#fffafcdd}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Fredoka,system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,var(--bg1),var(--bg2));min-height:100vh;overflow-x:hidden}
+h1,h2{font-family:'Playfair Display',serif;text-align:center;margin:.4em 0}
+h1{font-size:2rem;background:linear-gradient(90deg,var(--rose),var(--lav));-webkit-background-clip:text;color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 90px}
+.card{background:var(--card);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 8px 24px #c46a9a22;backdrop-filter:blur(6px);animation:pop .35s ease}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;margin:8px 0;font:600 1.05rem Fredoka;color:#fff;background:linear-gradient(135deg,var(--rose),#ff9a8b);box-shadow:0 4px 14px #ff6f9155;transition:transform .1s}
+.btn:active{transform:scale(.96)}.btn.alt{background:linear-gradient(135deg,var(--lav),#7fb3ff)}.btn.ghost{background:#fff;color:var(--ink);box-shadow:none;border:2px solid #f3c6d6}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+input,select{font:600 1.1rem Fredoka;padding:12px;border-radius:14px;border:2px solid #f3c6d6;width:100%;background:#fff;color:var(--ink);text-align:center}
+.muted{opacity:.7;text-align:center;font-size:.95rem}.code{font-size:1.8rem;letter-spacing:.2em;color:var(--rose)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:30px;z-index:99;animation:pop .3s}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+.hearts{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.hearts span{position:absolute;bottom:-40px;font-size:22px;opacity:.35;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-110vh) rotate(30deg)}}
+.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fffd;backdrop-filter:blur(8px);box-shadow:0 -4px 16px #0001;z-index:50}
+.tabs button{flex:1;border:0;background:none;padding:12px 4px 16px;font:600 .85rem Fredoka;color:var(--ink)}.tabs button.on{color:var(--rose)}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;background:#ffe0ea;font-size:.8rem;margin:2px}
+
+.lc{position:relative;border-radius:16px;padding:10px 8px;text-align:center;background:linear-gradient(160deg,#fff,#ffeef4);border:3px solid #f3c6d6;overflow:hidden;transition:transform .15s}
+.lc .em{font-size:2.6rem;display:block;animation:floaty 3s ease-in-out infinite}.lc .nm{font-weight:600;font-size:.9rem;line-height:1.1}
+.lc .st{display:flex;justify-content:space-around;font-size:.8rem;margin-top:4px}.lc .cost{position:absolute;top:4px;left:6px;background:var(--lav);color:#fff;border-radius:50%;width:22px;height:22px;font-size:.8rem;line-height:22px}
+.lc .cnt{position:absolute;top:4px;right:6px;font-size:.75rem}
+.r1{border-color:#f3c6d6}.r2{border-color:#7fb3ff;background:linear-gradient(160deg,#fff,#e6f0ff)}.r3{border-color:#a98bff;background:linear-gradient(160deg,#fff,#efe6ff)}
+.r4{border-color:var(--gold);background:linear-gradient(160deg,#fffbe9,#ffe6f0)}
+.r3::after,.r4::after{content:'';position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 40%,#fff9 50%,transparent 60%);animation:shine 2.5s infinite}
+@keyframes shine{from{transform:translateX(-60%)}to{transform:translateX(60%)}}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.lock{filter:grayscale(1) brightness(1.6);opacity:.5}
+.big .em{font-size:5rem}.big{max-width:220px;margin:0 auto}
+.spark{position:fixed;pointer-events:none;font-size:20px;z-index:90;animation:burst 1s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) scale(.3);opacity:0}}
+.hp{height:14px;border-radius:10px;background:#f3d6e0;overflow:hidden}.hp>i{display:block;height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));transition:width .5s}
+.boss{font-size:4rem;text-align:center;animation:floaty 2s infinite}.hit{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.hand{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.hand .lc{padding:6px 2px}.hand .em{font-size:1.8rem}.hand .nm{font-size:.7rem}
+.played{opacity:.35;transform:scale(.9)}.field{min-height:40px;text-align:center;font-size:1.6rem}
+.mem{font-style:italic;text-align:center;opacity:.85}
+</style></head><body><div class="wrap" id="app"></div>
+<nav class="tabs" id="tabs" style="display:none"><button data-t="explore">🌸 Explore</button><button data-t="col">📖 Album</button><button data-t="battle">⚔️ Battle</button><button data-t="set">⚙️</button></nav>
+<script>// ---- shared co-op layer (PeerJS public broker, host-authoritative) ----
+const NET={peer:null,conn:null,mode:'solo',me:0,code:'',onState:null,onStatus:null,apply:null};
+function netStatus(t){NET.onStatus&&NET.onStatus(t)}
+function netCode(){const a='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<4;i++)s+=a[Math.random()*a.length|0];return s}
+function netReady(){return typeof Peer!=='undefined'}
+function netSetup(c){
+  c.on('open',()=>{NET.conn=c;netStatus('connected');if(NET.mode==='host')netBroadcast();});
+  c.on('data',d=>{
+    if(NET.mode==='host'&&d.t==='act'){NET.apply(d.a,1);netBroadcast();NET.onState&&NET.onState();}
+    else if(NET.mode==='guest'&&d.t==='state'){NET.onState&&NET.onState(d.s);}
+  });
+  c.on('close',()=>{NET.conn=null;netStatus('disconnected')});
+}
+function netHost(prefix,cb){
+  if(!netReady())return netStatus('offline');
+  NET.mode='host';NET.me=0;NET.code=netCode();
+  NET.peer=new Peer(prefix+NET.code);
+  NET.peer.on('open',()=>{netStatus('waiting');cb&&cb(NET.code)});
+  NET.peer.on('connection',c=>{if(NET.conn)NET.conn.close();netSetup(c)});
+  NET.peer.on('error',e=>{if(e.type==='unavailable-id'){NET.peer.destroy();netHost(prefix,cb)}else netStatus('error: '+e.type)});
+}
+function netJoin(prefix,code){
+  if(!netReady())return netStatus('offline');
+  NET.mode='guest';NET.me=1;NET.code=code.toUpperCase().trim();
+  NET.peer=new Peer();
+  NET.peer.on('open',()=>{netStatus('connecting');netSetup(NET.peer.connect(prefix+NET.code,{reliable:true}))});
+  NET.peer.on('error',e=>netStatus(e.type==='peer-unavailable'?'no room with that code':'error: '+e.type));
+}
+let NET_GET=null; // fn returning state to broadcast
+function netBroadcast(){if(NET.mode==='host'&&NET.conn&&NET.conn.open)NET.conn.send({t:'state',s:NET_GET()})}
+// act: guest sends to host; host/solo apply locally
+function act(a){
+  if(NET.mode==='guest'){if(NET.conn&&NET.conn.open)NET.conn.send({t:'act',a});else toast('Not connected');return}
+  NET.apply(a,NET.mode==='solo'?(a.p??0):0);netBroadcast();NET.onState&&NET.onState();
+}
+function toast(m){let t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+// Lobby UI helper: renders into el, calls onStart(mode)
+function lobbyUI(el,prefix,onStart){
+  el.innerHTML=`<div class="card lob"><h3>Play together</h3>
+  <button class="btn" id="lbHost">💞 Create room (2 phones)</button>
+  <div class="row"><input id="lbCode" maxlength="4" placeholder="CODE" autocapitalize="characters"><button class="btn alt" id="lbJoin">Join</button></div>
+  <button class="btn ghost" id="lbSolo">📱 Pass-and-play on one phone</button>
+  <p id="lbStat" class="muted"></p></div>`;
+  const st=el.querySelector('#lbStat');
+  NET.onStatus=t=>{st.innerHTML=t==='waiting'?`Room code: <b class="code">${NET.code}</b><br>Ask your partner to open this game and tap Join.`:t==='connected'?'Connected! 💖':t==='offline'?'Online play unavailable — use pass-and-play.':t;
+    if(t==='connected')onStart(NET.mode); if(t==='disconnected')toast('Partner disconnected');};
+  el.querySelector('#lbHost').onclick=()=>netHost(prefix);
+  el.querySelector('#lbJoin').onclick=()=>{const c=el.querySelector('#lbCode').value;if(c.length===4)netJoin(prefix,c)};
+  el.querySelector('#lbSolo').onclick=()=>{NET.mode='solo';onStart('solo')};
+}
+
+(function(){const h=document.createElement('div');h.className='hearts';for(let i=0;i<14;i++){const s=document.createElement('span');s.textContent=['💗','💕','✨','🌸'][i%4];s.style.left=Math.random()*100+'%';s.style.animationDuration=(8+Math.random()*10)+'s';s.style.animationDelay=(-Math.random()*15)+'s';h.appendChild(s)}document.body.appendChild(h)})();
+let SND=localStorage.getItem('snd')!=='0';function beep(f=660,d=.12){if(!SND)return;try{const a=beep.c||(beep.c=new AudioContext()),o=a.createOscillator(),g=a.createGain();o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(.15,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d)}catch(e){}}
+function chime(){beep(660);setTimeout(()=>beep(880),110);setTimeout(()=>beep(1320,.25),220)}
+
+const EL={spark:'💗 Spark',cozy:'🏠 Cozy',feast:'🍽️ Feast',adv:'🧭 Adventure'};
+const RN=['','Common','Rare','Epic','Legendary'];
+const CARDS=[
+['ping','Pocket Ping','📱',1,'spark',3,1,1,'The very first message — Rod said hi first.'],
+['sun','Sunrise Caller','🌅',1,'spark',2,2,1,'6:00 AM calls that made the long commute fly by.'],
+['taco','Taco Pup','🌮',1,'feast',3,1,1,'Mexican night, extra salsa.'],
+['curry','Curry Kitty','🍛',1,'feast',2,2,1,'Warm, spicy, comforting — Indian takeout love.'],
+['dump','Dumpling Bun','🥟',1,'feast',1,3,1,'Soft, folded with care. Asian food date!'],
+['couch','Couch Koala','🛋️',1,'cozy',1,3,1,'Friday date night at home, blanket included.'],
+['pop','Popcorn Puff','🍿',1,'cozy',2,2,1,'One more episode? Okay, one more.'],
+['boba','Boba Bunny','🧋',1,'feast',2,1,1,'Sweet sips, big smiles.'],
+['owl','Commute Owl','🦉',2,'spark',4,3,2,'Wide awake and in love before the sun rose.'],
+['fox','Friend-of-a-Friend Fox','🦊',2,'spark',5,2,2,'They had crossed paths before — fate was patient.'],
+['otter','Chef Otters','🦦',2,'feast',3,4,2,'Cooking dinner side by side, holding hands.'],
+['cow','Starlight Cowpoke','🤠',2,'adv',4,4,2,'A brave little sheriff for Gio\'s toy box.'],
+['ranger','Space Ranger Pup','🚀',2,'adv',5,3,2,'To the stars and way, way past them!'],
+['racer','Race Car Roo','🏎️',2,'adv',6,1,2,'Vroom! Gio\'s favorite speedy friend.'],
+['calm','Calm Tortoise','🐢',2,'cozy',2,6,2,'Rod: patient, gentle, level-headed.'],
+['plan','Planner Penguin','🗓️',2,'cozy',4,4,2,'Delene: structured, independent, always ready.'],
+['ring','Ring Swan','💍',3,'spark',7,4,3,'Engaged after 11 magical months.'],
+['key','Home-Key Hedgehog','🏡',3,'cozy',4,8,3,'Their own home, 5 months after "yes". Home is him.'],
+['whale','Glacier Whale','🐋',3,'adv',8,4,3,'Alaska cruise wonders with little Gio.'],
+['dove','Vow Doves','🕊️',3,'spark',6,6,3,'"I do" — two hearts, one story.'],
+['gio','Rainbow Gio','🌈',4,'cozy',9,9,4,'Giovanni, born Feb 10, 2024. Our rainbow baby.'],
+['grace','Grace Light','🕯️',4,'spark',8,10,4,'Thankful to God. Gio dedicated at Christ Fellowship, Sept 27, 2026.'],
+['story','Unfinished Story','📖',4,'adv',11,7,4,'More kids, more travel, more life side by side. Our story isn\'t finished.'],
+].map(c=>({id:c[0],nm:c[1],em:c[2],r:c[3],el:c[4],atk:c[5],def:c[6],cost:c[7],tx:c[8]}));
+const C=Object.fromEntries(CARDS.map(c=>[c.id,c]));
+const BOSSES=[
+['Monday Grump','😤',35,4,null,'Beat the Monday blues together.'],
+['Dish Mountain','🍽️',55,6,'ring','The sink is overflowing! Teamwork time.'],
+['Sleepless Night Gremlin','🌙',75,7,'gio','New-parent nights... you\'ve got this.'],
+['Budget Beast','💸',95,8,'grace','Dreaming of financial freedom.'],
+['Fog of Busy','🌫️',120,9,'story','Clear the fog and make time for each other.'],
+].map((b,i)=>({i,nm:b[0],em:b[1],hp:b[2],atk:b[3],rew:b[4],tx:b[5]}));
+const KEY='lovedeck_v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'null')||{col:{ping:1,sun:1,couch:1,taco:1},enc:null,bat:null,beaten:[],names:['Delene','Rod']};
+let tab='explore',solo=0; // solo: which player is acting in pass-and-play
+NET_GET=()=>S;
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function me(){return NET.mode==='solo'?solo:NET.me}
+const rnd=n=>Math.random()*n|0;
+function pickEnc(){const w=[0,60,28,12,0];let t=Math.random()*100,r=1;for(r=1;r<4;r++){t-=w[r];if(t<0)break}const pool=CARDS.filter(c=>c.r===r);return pool[rnd(pool.length)].id}
+function draw(){const ids=Object.keys(S.col);return Array.from({length:4},()=>ids[rnd(ids.length)])}
+function newRound(b){b.round++;b.p.forEach(p=>{p.en=Math.min(6,b.round+1);p.hand=draw();p.used=[];p.ready=false});b.intent=Math.round(BOSSES[b.boss].atk*(0.8+Math.random()*0.6))}
+NET.apply=(a,p)=>{
+  const now=Date.now();
+  if(a.k==='explore'){S.enc={id:pickEnc(),hearts:3,last:[0,0],msg:'A wild friend appears!'}}
+  else if(a.k==='throw'&&S.enc&&S.enc.hearts>0){const e=S.enc,c=C[e.id];e.last[p]=now;const duo=now-e.last[1-p]<3000;
+    let ch=[0,.75,.5,.32][c.r]+(duo?.25:0)+(a.good?.12:0);e.hearts--;
+    if(Math.random()<ch){S.col[e.id]=(S.col[e.id]||0)+1;e.caught=true;e.hearts=0;e.msg=(duo?'💞 DUO THROW! ':'')+'Caught '+c.nm+'!'}
+    else e.msg=e.hearts?(duo?'So close, even with a duo throw!':'It wiggled free! Tip: both throw within 3s for a Duo bonus.'):c.nm+' floated away… next time!'}
+  else if(a.k==='leave'){S.enc=null}
+  else if(a.k==='fight'){const B=BOSSES[a.b];S.bat={boss:a.b,hp:B.hp,team:30,round:0,log:'Let\'s go, team!',p:[{},{}],field:[]};newRound(S.bat)}
+  else if(a.k==='play'&&S.bat){const pl=S.bat.p[p],id=pl.hand[a.i],c=C[id];if(pl.ready||pl.used.includes(a.i)||c.cost>pl.en)return;pl.en-=c.cost;pl.used.push(a.i);S.bat.field.push({id,p})}
+  else if(a.k==='ready'&&S.bat){const b=S.bat;b.p[p].ready=true;if(NET.mode!=='solo'&&!b.p[1-p].ready&&NET.conn)return;if(NET.mode==='solo'&&!b.p[1-p].ready)return;resolve(b)}
+  else if(a.k==='endbat'){S.bat=null}
+  else if(a.k==='swap'){S.names.reverse()}
+  save();
+};
+function resolve(b){let atk=0,def=0;const els={};b.field.forEach(f=>{const c=C[f.id];atk+=c.atk;def+=c.def;(els[c.el]=els[c.el]||new Set()).add(f.p)});
+  const combo=Object.entries(els).filter(([e,s])=>s.size===2).map(([e])=>EL[e]);const mult=1+.5*combo.length;atk=Math.round(atk*mult);
+  b.hp=Math.max(0,b.hp-atk);const dmg=b.hp>0?Math.max(0,b.intent-def):0;b.team=Math.max(0,b.team-dmg);
+  b.log=`You dealt ${atk}${combo.length?' (COMBO '+combo.join(' + ')+'!)':''}. ${b.hp>0?`Boss hit for ${b.intent}, shield blocked ${Math.min(def,b.intent)} → -${dmg} hearts.`:''}`;
+  b.field=[];b.fx=Date.now();
+  if(b.hp<=0){b.won=true;const B=BOSSES[b.boss];if(!S.beaten.includes(b.boss))S.beaten.push(b.boss);const rew=B.rew||pickEnc();S.col[rew]=(S.col[rew]||0)+1;b.reward=rew}
+  else if(b.team<=0){b.lost=true}else newRound(b)}
+NET.onState=s=>{if(s){S=s;save()}render()};
+function cardHTML(c,extra='',cnt){return `<div class="lc r${c.r} ${extra}"><span class="cost">${c.cost}</span>${cnt?`<span class="cnt">×${cnt}</span>`:''}<span class="em">${c.em}</span><div class="nm">${c.nm}</div><div class="st"><span>⚔️${c.atk}</span><span>🛡️${c.def}</span></div></div>`}
+function sparkle(n=14){for(let i=0;i<n;i++){const s=document.createElement('div');s.className='spark';s.textContent=['✨','💖','⭐','💕'][i%4];s.style.left='50%';s.style.top='40%';s.style.setProperty('--x',(Math.random()*300-150)+'px');s.style.setProperty('--y',(Math.random()*300-150)+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+const app=document.getElementById('app');let lastMsg='',lastFx=0;
+function header(){const n=S.names;return `<h1>Love Deck</h1><p class="muted">${n[0]} & ${n[1]} · ${NET.mode==='solo'?'pass-and-play':NET.mode==='host'?'room '+NET.code+(NET.conn?' · 💞 connected':' · waiting…'):'room '+NET.code+(NET.conn?' · 💞 connected':' · offline')}</p>`}
+function render(){
+  document.getElementById('tabs').style.display='flex';document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  let h=header();
+  if(tab==='explore'){const e=S.enc;
+    if(!e)h+=`<div class="card"><p class="mem">Wander through your love story and meet sweet creatures. Toss hearts to collect them!</p><button class="btn" onclick="act({k:'explore'})">🌸 Explore together</button></div>`;
+    else{const c=C[e.id];h+=`<div class="card" style="text-align:center"><span class="tag">${RN[c.r]}</span><span class="tag">${EL[c.el]}</span>${cardHTML(c,'big')}<p class="mem">${c.tx}</p><p><b>${e.msg}</b></p>
+      ${e.hearts>0?`<p>Hearts left: ${'💗'.repeat(e.hearts)}</p><div id="ring" style="margin:auto;width:120px;height:120px;border-radius:50%;border:6px solid var(--rose);animation:ringp 1.2s infinite"></div><button class="btn" id="th">💘 Throw a heart (as ${S.names[me()]})</button>`:`<button class="btn alt" onclick="act({k:'leave'})">Continue</button>`}</div>`;
+      if(e.msg!==lastMsg&&e.caught){sparkle();chime()}}
+    lastMsg=e?e.msg:'';
+    h+=soloSwitch();
+  }
+  if(tab==='col'){const own=Object.keys(S.col).length;h+=`<div class="card"><h2>Our Album</h2><p class="muted">${own}/${CARDS.length} memories collected · shared between you both</p><div class="grid">${CARDS.map(c=>S.col[c.id]?`<div onclick="showCard('${c.id}')">${cardHTML(c,'',S.col[c.id])}</div>`:`<div class="lc lock r${c.r}"><span class="em">❔</span><div class="nm">${RN[c.r]}</div></div>`).join('')}</div>
+    <p class="muted" style="margin-top:16px">Legendaries are earned by defeating challenge bosses together.</p>
+    <p class="mem">🌟 In quiet, loving memory of our little one, who is always held in our hearts and in God's hands.</p></div>`}
+  if(tab==='battle'){const b=S.bat;
+    if(!b){h+=`<div class="card"><h2>Challenge Bosses</h2><p class="muted">Each round you both get energy and a hand from your shared album. Play cards, then tap Ready. Play the same element as your partner in a round for a COMBO (+50%).</p>${BOSSES.map(B=>{const open=B.i===0||S.beaten.includes(B.i-1);return `<button class="btn ${S.beaten.includes(B.i)?'alt':''}" ${open?'':'disabled'} onclick="act({k:'fight',b:${B.i}})">${B.em} ${B.nm} · ❤️${B.hp} ${S.beaten.includes(B.i)?'✓':''}${B.rew?' · reward: '+C[B.rew].em:''}</button>`}).join('')}</div>`}
+    else{const B=BOSSES[b.boss],m=me(),pl=b.p[m],part=b.p[1-m];
+      h+=`<div class="card"><div class="boss ${b.fx>lastFx?'hit':''}">${B.em}</div><h2>${B.nm}</h2><div class="hp"><i style="width:${b.hp/B.hp*100}%"></i></div><p class="muted">Boss ${b.hp}/${B.hp} · next attack ⚔️${b.intent}</p>
+      <div class="hp"><i style="width:${b.team/30*100}%;background:linear-gradient(90deg,#7fe0b0,#7fb3ff)"></i></div><p class="muted">Team hearts ${b.team}/30 · round ${b.round}</p><p><b>${b.log}</b></p>
+      <div class="field">${b.field.map(f=>C[f.id].em).join(' ')||'<span class="muted">Field is empty</span>'}</div></div>`;
+      if(b.won)h+=`<div class="card" style="text-align:center"><h2>Victory! 🎉</h2><p>You earned:</p>${cardHTML(C[b.reward],'big')}<p class="mem">${C[b.reward].tx}</p><button class="btn" onclick="act({k:'endbat'})">Back</button></div>`;
+      else if(b.lost)h+=`<div class="card" style="text-align:center"><h2>Regroup 💗</h2><p class="mem">Every couple has tough rounds. Catch more friends and try again.</p><button class="btn" onclick="act({k:'endbat'})">Back</button></div>`;
+      else h+=`<div class="card"><p><b>${S.names[m]}</b> · ⚡ energy ${pl.en} ${pl.ready?'· ready ✓':''} &nbsp; <span class="muted">${S.names[1-m]}: ${part.ready?'ready ✓':'choosing…'}</span></p><div class="hand">${pl.hand.map((id,i)=>`<div onclick="act({k:'play',i:${i},p:${m}})">${cardHTML(C[id],pl.used.includes(i)||C[id].cost>pl.en?'played':'')}</div>`).join('')}</div>
+      <button class="btn alt" ${pl.ready?'disabled':''} onclick="act({k:'ready',p:${m}});${NET.mode==='solo'?'solo=1-solo;':''}">✅ Ready${NET.mode==='solo'?' → pass to '+S.names[1-m]:''}</button></div>`;
+      if(b.fx>lastFx){lastFx=b.fx;beep(220,.2)}
+      h+=soloSwitch()}}
+  if(tab==='set'){h+=`<div class="card"><button class="btn ghost" onclick="act({k:'swap'})">🔁 Swap names (host is ${S.names[0]})</button><button class="btn ghost" onclick="SND=!SND;localStorage.setItem('snd',SND?1:0);render()">Sound: ${SND?'on 🔊':'off 🔇'}</button><button class="btn ghost" onclick="if(confirm('Reset all progress on this phone?')){localStorage.removeItem(KEY);location.reload()}">Reset progress</button><p class="muted">Progress saves on each phone automatically. The room creator's album is the shared one during co-op.</p></div>`}
+  app.innerHTML=h;
+  const th=document.getElementById('th');if(th){const t0=Date.now();th.onclick=()=>{const ph=((Date.now()-t0)%1200)/1200;beep(880);act({k:'throw',p:me(),good:ph>.4&&ph<.6})}}
+}
+function soloSwitch(){return NET.mode==='solo'?`<button class="btn ghost" onclick="solo=1-solo;render()">📱 Now playing: ${S.names[solo]} (tap to switch)</button>`:''}
+function showCard(id){const c=C[id];app.insertAdjacentHTML('afterbegin',`<div class="card" onclick="this.remove()" style="position:fixed;inset:20px;z-index:80;display:flex;flex-direction:column;justify-content:center;text-align:center"><span class="tag">${RN[c.r]} · ${EL[c.el]}</span>${cardHTML(c,'big')}<p class="mem">${c.tx}</p><p class="muted">tap to close</p></div>`)}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+document.head.insertAdjacentHTML('beforeend','<style>@keyframes ringp{0%{transform:scale(1.3);opacity:.3}50%{transform:scale(.6);opacity:1}100%{transform:scale(1.3);opacity:.3}}</style>');
+app.innerHTML='<h1>Love Deck</h1><p class="muted">Collect the creatures of your love story, then battle life\'s little bosses together.</p><div class="card" style="text-align:center;font-size:3rem">💌🦊💍🏡🌈</div><div id="lobby"></div>';
+lobbyUI(document.getElementById('lobby'),'lovedeck-dr-',()=>render());
+</script></body></html>
